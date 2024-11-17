@@ -17,7 +17,7 @@ def call(String FrontendVMIP, String SshCredentialsId, String DockerHubUser, Str
         
         # Run the new container in detached mode on port 80
         docker run -d -p 80:80 --name ${ContainerName} ${DockerHubUser}/${ProjectName}:${ImageTag}
-        EOF
+       << EOF
         """
     }
 }
