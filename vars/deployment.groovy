@@ -3,7 +3,7 @@ def call(String FrontendVMIP,String SshCredentialsId, String DockerHubUser, Stri
         sh """
         ssh -i \$SSH_KEY_FILE -o StrictHostKeyChecking=no \$SSH_USER@$FrontendVMIP << EOF
         # Pull the latest Docker image from Docker Hub
-        docker pull "${DockerHubUser}"/${ProjectName}:${ImageTag}
+        docker pull ${DockerHubUser}/${ProjectName}:${ImageTag}
         
         echo 'Stopping and removing all containers if they exist...'
       # Check if port 80 is in use and stop/remove the container
