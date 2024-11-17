@@ -6,13 +6,10 @@ def call(String FrontendVMIP, String SshCredentialsId, String DockerHubUser, Str
         docker pull ${DockerHubUser}/${ProjectName}:${ImageTag}
         
         echo 'Stopping and removing all containers if they exist...'
-        # Check if port 80 is in use and stop/remove the container
-        echo "Checking if port 80 is in use..."
-        container_id=\$(sudo docker ps -q --filter "publish=80")
-        if [ ! -z "\$container_id" ]; then
-            echo "Stopping and removing container using port 80: \$container_id"
-            sudo docker stop \$container_id
-            sudo docker rm \$container_id
+        # Stop and remove all containers
+        if [ $(docker ps -aq) ]; then
+        docker stop $(docker ps -aq) || true
+        docker rm $(docker ps -aq) || true
         fi
         
         # Run the new container in detached mode on port 80
