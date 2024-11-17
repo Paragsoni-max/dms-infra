@@ -1,6 +1,6 @@
-def call(String url, String branch, String credentials){
+def call(String GitUrl, String GitBranch, String GitCredentials){
   echo ("Started cloning the code")
-    git branch: branch,
-        url: url,
-        credentialsId: credentials
+    git branch: "${GitBranch}",
+        url: "${GitUrl}",
+        credentialsId: "${GitCredentials}"
 }
