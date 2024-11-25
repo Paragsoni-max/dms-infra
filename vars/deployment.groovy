@@ -1,4 +1,4 @@
-def call(String FrontendVMIP, String SshCredentialsId, String DockerHubUser, String ProjectName, String ImageTag, String ContainerName) {
+def call(String FrontendVMIP, String SshCredentialsId, String DockerHubUser, String ProjectName, String ImageTag, String ContainerName, String PortMapping) {
     withCredentials([sshUserPrivateKey(credentialsId: SshCredentialsId, keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USER')]) {
         sh """
         ssh -i \$SSH_KEY_FILE -o StrictHostKeyChecking=no \$SSH_USER@$FrontendVMIP << EOF
@@ -13,7 +13,7 @@ def call(String FrontendVMIP, String SshCredentialsId, String DockerHubUser, Str
         fi
         
         # Run the new container in detached mode on port 80
-        docker run -d -p 80:80 --name ${ContainerName} ${DockerHubUser}\\/${ProjectName}:${ImageTag}
+        docker run -d -p ${PortMapping} --name ${ContainerName} ${DockerHubUser}\\/${ProjectName}:${ImageTag}
         << EOF
         """
     }
