@@ -5,16 +5,27 @@ def call(String VirtualMachineIP, String SshCredentialsId, String DockerHubUser,
         # Pull the latest Docker image from Docker Hub
         docker pull ${DockerHubUser}\\/${ProjectName}:${ImageTag}
         
-        echo 'Stopping and removing all containers if they exist...'
-        # Stop and remove all containers
-        if [ \$(docker ps -aq) ]; then
-            docker stop \$(docker ps -aq) || true
-            docker rm \$(docker ps -aq) || true
+        echo 'Checking if a container with the same name exists...'
+        # Check if a container with the same name exists
+        if [ \$(docker ps -aq -f name=${ContainerName}) ]; then
+            echo 'Stopping and removing the existing container...'
+            # Stop and remove the container with the same name
+            docker stop ${ContainerName} || true
+            docker rm ${ContainerName} || true
         fi
         
-        # Run the new container in detached mode on port 80
+        # Check if any container is using the same port
+        CONTAINER_PORT=\$(docker ps --format "{{.Ports}}" -f "name=${ContainerName}" | grep -oP "(?<=:)[0-9]{1,5}(?=->${PortMapping%:*})")
+        if [ -n "\$CONTAINER_PORT" ]; then
+            echo "Stopping and removing container running on the same port (\$CONTAINER_PORT)..."
+            # Stop and remove the container running on the same port
+            docker stop \$(docker ps -q --filter "publish=${PortMapping%:*}") || true
+            docker rm \$(docker ps -q --filter "publish=${PortMapping%:*}") || true
+        fi
+
+        # Run the new container in detached mode with the specified port mapping
         docker run -d -p ${PortMapping} --name ${ContainerName} ${DockerHubUser}\\/${ProjectName}:${ImageTag}
-        << EOF
+        EOF
         """
     }
 }
