@@ -1,4 +1,11 @@
 def call(String VirtualMachineIP, String SshCredentialsId, String DockerHubUser, String ProjectName, String ImageTag, String ContainerName, String PortMapping) {
+        echo "SshCredentialsId: ${SshCredentialsId}"
+    echo "DockerHubUser: ${DockerHubUser}"
+    echo "ProjectName: ${ProjectName}"
+    echo "ImageTag: ${ImageTag}"
+    echo "ContainerName: ${ContainerName}"
+    echo "Portmapping: ${PortMapping}"
+
     withCredentials([sshUserPrivateKey(credentialsId: SshCredentialsId, keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USER')]) {
         sh """
         ssh -i \$SSH_KEY_FILE -o StrictHostKeyChecking=no \$SSH_USER@$VirtualMachineIP << EOF
