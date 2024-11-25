@@ -1,4 +1,4 @@
-def server_deployment(String BackendVMIP, String SshCredentialsId, String DockerHubUser, String ProjectName, String ImageTag, String ContainerName) {
+def call(String BackendVMIP, String SshCredentialsId, String DockerHubUser, String ProjectName, String ImageTag, String ContainerName) {
     // Log parameters for debugging
     echo "BackendVMIP: ${BackendVMIP}"
     echo "SshCredentialsId: ${SshCredentialsId}"
