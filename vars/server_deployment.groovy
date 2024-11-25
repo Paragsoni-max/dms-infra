@@ -7,8 +7,7 @@ def call(String BackendVMIP, String SshCredentialsId, String DockerHubUser, Stri
     echo "ImageTag: ${ImageTag}"
     echo "ContainerName: ${ContainerName}"
     
-     withCredentials([sshUserPrivateKey(credentialsId: SshCredentialsId, keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USER')]) {
-        // Log SSH details
+    withCredentials([sshUserPrivateKey(credentialsId: SshCredentialsId, keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USER')]) {
         echo "SSH_USER: \$SSH_USER"
         echo "SSH_KEY_FILE: \$SSH_KEY_FILE"
         
@@ -28,7 +27,8 @@ def call(String BackendVMIP, String SshCredentialsId, String DockerHubUser, Stri
         // # Run the new container in detached mode on port 5000
         // echo "Starting container: ${ContainerName}"
         // docker run --restart always --name ${ContainerName} -p 5000:5000 ${DockerHubUser}/${ProjectName}:${ImageTag}
-        // EOF
+       << EOF
         """
+    } 
+} 
 
-}
