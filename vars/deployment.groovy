@@ -15,17 +15,17 @@ def call(String VirtualMachineIP, String SshCredentialsId, String DockerHubUser,
         fi
         
         # Check if any container is using the same port
-        CONTAINER_PORT=\$(docker ps --format "{{.Ports}}" -f "name=${ContainerName}" | grep -oP "(?<=:)[0-9]{1,5}(?=->${PortMapping%:*})")
+        CONTAINER_PORT=\$(docker ps --format "{{.Ports}}" -f "name=${ContainerName}" | grep -oP "(?<=:)[0-9]{1,5}(?=->\${PortMapping%:*})")
         if [ -n "\$CONTAINER_PORT" ]; then
             echo "Stopping and removing container running on the same port (\$CONTAINER_PORT)..."
             # Stop and remove the container running on the same port
-            docker stop \$(docker ps -q --filter "publish=${PortMapping%:*}") || true
-            docker rm \$(docker ps -q --filter "publish=${PortMapping%:*}") || true
+            docker stop \$(docker ps -q --filter "publish=\${PortMapping%:*}") || true
+            docker rm \$(docker ps -q --filter "publish=\${PortMapping%:*}") || true
         fi
 
         # Run the new container in detached mode with the specified port mapping
         docker run -d -p ${PortMapping} --name ${ContainerName} ${DockerHubUser}\\/${ProjectName}:${ImageTag}
-        EOF
+       << EOF
         """
     }
 }
