@@ -1,7 +1,7 @@
-def call(String FrontendVMIP, String SshCredentialsId, String DockerHubUser, String ProjectName, String ImageTag, String ContainerName, String PortMapping) {
+def call(String VirtualMachineIP, String SshCredentialsId, String DockerHubUser, String ProjectName, String ImageTag, String ContainerName, String PortMapping) {
     withCredentials([sshUserPrivateKey(credentialsId: SshCredentialsId, keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USER')]) {
         sh """
-        ssh -i \$SSH_KEY_FILE -o StrictHostKeyChecking=no \$SSH_USER@$FrontendVMIP << EOF
+        ssh -i \$SSH_KEY_FILE -o StrictHostKeyChecking=no \$SSH_USER@$VirtualMachineIP << EOF
         # Pull the latest Docker image from Docker Hub
         docker pull ${DockerHubUser}\\/${ProjectName}:${ImageTag}
         
@@ -18,4 +18,3 @@ def call(String FrontendVMIP, String SshCredentialsId, String DockerHubUser, Str
         """
     }
 }
-
