@@ -1,4 +1,4 @@
-def call(String VirtualMachineIP, String SshCredentialsId, String DockerHubUser, String ProjectName, String ImageTag, String ContainerName, String PortMapping) {
+def call(String VirtualMachineIP, String SshCredentialsId, String DockerHubUser, String ProjectName, String ImageTag, String ContainerName, String PortMapping, String EnvFilePath) {
         echo "SshCredentialsId: ${SshCredentialsId}"
     echo "DockerHubUser: ${DockerHubUser}"
     echo "ProjectName: ${ProjectName}"
@@ -31,7 +31,7 @@ def call(String VirtualMachineIP, String SshCredentialsId, String DockerHubUser,
         fi
 
         # Run the new container in detached mode with the specified port mapping
-        docker run -d -p ${PortMapping} --name ${ContainerName} ${DockerHubUser}\\/${ProjectName}:${ImageTag}
+        docker run -d -p ${PortMapping} --name ${ContainerName} --env-file ${EnvFilePath} ${DockerHubUser}\\/${ProjectName}:${ImageTag}
        << EOF
         """
     }
