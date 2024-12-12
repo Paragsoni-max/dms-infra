@@ -31,7 +31,7 @@ def call(String VirtualMachineIP, String SshCredentialsId, String DockerHubUser,
         fi
 
         # Run the new container in detached mode with the specified port mapping
-        docker compose up -d
+        docker run -d -p ${PortMapping} --name ${ContainerName} --env-file ${EnvFilePath} ${DockerHubUser}\\/${ProjectName}:${ImageTag}
        << EOF
         """
     }
